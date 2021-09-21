@@ -61,7 +61,11 @@ orderCounter++;
     function fulfillOrder(uint256 _orderId) external payable{
         SellOrder storage s =allOrders[_orderId];
         require(!s.fulfiled, "Order has been fulfilled");
-        require(s.token.isApprovedForAll(account, operator));
+        require(s.token.isApprovedForAll(s.owner, address(this)),"should approve this contract as the operator first");
+        require(s.token.balanceOf(s.owner, s.id)>=s.tokenCount,"owner should never be greater than or equal tokens");
+    if(s._weiList){
+        payable(s.owner).transfer(s.weiAmount);
+    }
 
     }
 }
