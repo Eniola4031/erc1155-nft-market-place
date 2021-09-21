@@ -19,6 +19,8 @@ abstract contract MarketPlace is ERC1155Holder,IERC1155{
         uint256 id;
         address owner;
         bool fulfilled;
+        bool weiList;
+        bool available;
     }
     mapping(uint=>SellOrder) allOrders;
 
@@ -29,6 +31,13 @@ abstract contract MarketPlace is ERC1155Holder,IERC1155{
         stToken = _token;
 
     }
+    modifier onlySaleLister(uint256 _orderId){
+        require(msg.sender==allOrders[_orderId].owner,"You are not the order owner");
+        _;
+    }
+modifier onlyAvailable(uint256 _orderId){
+require(allOrders[_orderId].available, "order not available for sale");
+}
     function setSaleOrder(
         address _token,
         uint256 _tokenId,
@@ -55,6 +64,7 @@ if(!_weilist){
     require(_tokenPrice >0, "Token price should be greater than 0");
     s.tokenAmount= _tokenPrice;
 }
+s.available= true;
 orderCounter++;
 //orderCounter.increment();
     }
@@ -66,7 +76,33 @@ orderCounter++;
     if(s._weiList){
         payable(s.owner).transfer(s.weiAmount);
     }
+    if(!s._weiList){
+        require(stToken.allowance(msg.sender, address(this))>=s.tokenAmount, "you have to approve the token first");
+        require(stToken.transferFrom(msg.sender, s.owner, s.tokenAmount));
+        s.token.safeTransferFrom(s.owner, msg.sender, s.id, s.tokenCount,"");
+    }
+    s.fulfilled= true;
+    s.available= false;
+    }
 
+    function checkOrder(uint256 _orderId)public view returns(SellOrder memory){
+ return allOrders[_orderId];
+    }
+    fucntion changeOrderPrice(
+        uint256 _orderId,
+        uint256 _newwiePrice, 
+        uint256 _newTokenPrice)
+        public onlySaleLister(_orderId){
+require(!allOrders[_orderId].fulfilled, "Order already fulfilled");
+if(allOrders[_orderId].weiList){
+    allOrders[_orderId].weiAmount= _newwiePrice;
+}
+if (!allOrders[_orderId]weiList){
+    allOrder[_orderId].tokenAmount = _newTokenPrice;
+}
+    }
+    function cancelOrder(uint256 _orderId) public onlySaleLister(_orderId){
+        allOrders[_orderId].available=false;
     }
 }
 
