@@ -1,0 +1,29 @@
+Arguments: 
+  /usr/local/bin/node /usr/local/bin/yarn add openzeppelin/contracts
+
+PATH: 
+  /usr/local/opt/php@7.3/sbin:/usr/local/opt/php@7.3/bin:/usr/local/opt/php@7.3/sbin:/usr/local/opt/php@7.3/bin:/Users/eniolaagboola/.composer/vendor/bin:/Users/eniolaagboola/Desktop/flutter/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/opt/php@7.3/sbin:/usr/local/opt/php@7.3/bin:/Users/eniolaagboola/.composer/vendor/bin:/Users/eniolaagboola/Desktop/flutter/bin
+
+Yarn version: 
+  1.22.11
+
+Node version: 
+  14.15.4
+
+Platform: 
+  darwin x64
+
+Trace: 
+  Error: getaddrinfo ENOTFOUND github.com
+      at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:67:26)
+
+npm manifest: 
+  {
+    "name": "hardhat-project"
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
